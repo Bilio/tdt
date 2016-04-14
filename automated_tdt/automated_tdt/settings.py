@@ -50,12 +50,14 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SETTINGS_PATH = os.path.normpath(os.path.dirname(__file__))
+
 ROOT_URLCONF = 'automated_tdt.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.abspath(os.path.join(SETTINGS_PATH, '../templates'))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
