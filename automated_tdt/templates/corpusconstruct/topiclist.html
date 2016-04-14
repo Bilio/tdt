@@ -11,26 +11,31 @@
             <div class="col-xs-2 col-centered"></div>
             <div class="col-xs-8 col-centered">
                 <nav class="navbar navbar-inverse">
-                    <div class="container">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                                <span class="sr-only">Toggle navigation</span>
-                            </button>
-                            <a class="navbar-brand h1" href="#"><span class="h1">List of topics</span></a>
-                        </div>
+                  <div class="container-fluid">
+                    <div class="navbar-header">
+                      <a class="navbar-brand" href="#">List of topics</a>
                     </div>
+                    <ul class="nav navbar-nav">
+                      <li class="active"><a href="..">Back</a></li>
+                    </ul>
+                  </div>
                 </nav>
                 <div class="container">
                     {% if not topic_list %}
                         <div class=""col-xs-3 col-centered">
-                            <span>There are no topics available in the corpus as of now.</span>
+                            <span>There are no topics available in the corpus as of now.</span><br>
+                            <ul>
+                                <li><a href="..">Back to previous page</a></li>
+                                <li><a href="../addnewtopic/">Add New</a></li>
+                            </ul>
                         </div>
                     {% else %}
                         <ol class=".list-­inline">
                             {% for topic in topic_list %}
-                                <li><a href="viewdocs/">{{ topic }}</a></li>
+                                <li><a href="docs/">{{ topic }}</a></li>
                             {% endfor %}
                         </ol>
+                        <li><a href="../addnewtopic/">Add New</a></li>
                     {% endif %}
                 </div>
             </div>
