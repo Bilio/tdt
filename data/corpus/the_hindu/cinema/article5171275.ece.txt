@@ -1,0 +1,5 @@
+<news>
+<headline>மீண்டும் நாயகியாக ஐஸ்வர்யா ராய்!</headline>
+<description>
+'Happy Anniversary' படத்தின் மூலம் மீண்டும் நடிக்க தொடங்குகிறார் ஐஸ்வர்யா ராய்.</description>
+</news>

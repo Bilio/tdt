@@ -1,0 +1,5 @@
+<news>
+<headline>திரை விமர்சனம்: கோர்ட் (மராத்தி)</headline>
+<description>
+அமைதி.. அமைதி.. கோர்ட் நடக்கிறது﻿</description>
+</news>
