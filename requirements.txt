@@ -1,1 +1,4 @@
 Django==1.9.4
+beautifulsoup4==4.4.1
+html5lib==0.9999999
+lxml==3.6.0
