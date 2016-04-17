@@ -35,6 +35,61 @@ def updateAvgLength(lenAvg,length,N):
 def updateN(N):
     return N+1
 
+def calcluatetfD(tfRawD,lenD,lenAvg):
+    tfD ={}
+    for i in tfRawD:
+            tfD[i]=float(tfRawD[i])/(tfRawD[i]+0.5+1.5*(lenD/lenAvg))
+    return tfD
+
+def calculatetfT(tfRaw,length):
+    tfT={}
+    for i in tfRaw:
+            tfT[i]=float(tfRaw[i])/(tfRaw[i]+0.5+1.5*(length/lenAvg))
+    return tfT
+
+
+def calculateidf(V,N):
+    idf={}
+    for word in V:
+        print("N")
+        print(N)
+        Nor=(math.log((1.0*N/V[word]),10))
+        idf[word]=Nor/math.log((N+1),10)
+    return idf
+
+
+def CalcProductDoc(tfD, idf):
+    Dh ={}
+    for word in tfD:
+            Dh[word]=tfD[word]*idf[word]
+    return Dh
+def CalcProductTopic(tfT,idf):
+    Th ={}
+    for word in tfT:
+            Th[word]=tfT[word]*idf[word]
+    return Th
+
+def similarity(Dh,Th):
+    Dh_Th=0
+    DhSquared=0
+    ThSquared=0
+    for word in V:
+        if word in Dh:
+            Dvalue=Dh[word]
+        else:
+            Dvalue=0
+        if word in Th:
+            Tvalue=Th[word]
+        else:
+            Tvalue=0
+
+        Dh_Th+=1.0*Dvalue*Tvalue
+        #print(Dh_Th)
+        DhSquared+=1.0*Dvalue*Dvalue
+        ThSquared+=1.0*Tvalue*Tvalue
+    cosineDeno=math.sqrt(DhSquared*ThSquared)
+    similarity=float(Dh_Th)/cosineDeno
+    return similarity
 
 #Read the topics file
 topics=[]
@@ -114,40 +169,34 @@ for doc in docs:
         print("tfRaw of topic")
         print(topic['tfRaw'])
         tfD={}
-        for i in tfRawD:
-            tfD[i]=float(tfRawD[i])/(tfRawD[i]+0.5+1.5*(lenD/lenAvg))
+        tfD = calcluatetfD(tfRawD,lenD,lenAvg)
         print("tfD")
         print(tfD)
         #Calculated tfT --- tf of Topic
         tfT={}
-        for i in topic['tfRaw']:
-            tfT[i]=float(topic['tfRaw'][i])/(topic['tfRaw'][i]+0.5+1.5*(topic['length']/lenAvg))
+        tfT = calculatetfT(topic['tfRaw'],topic['length'])
         print("tfT")
         print(tfT)
 
         #IDF SCORE COMPUTATION
         #update idf statistics
         idf={}
-        for word in V:
-            print("word n df")
-            print(word)
-            print(N)
-            print(V[word])
-            idf[word]=math.log((1.0*N/V[word]),10)/math.log((N+1),10)
+        idf = calculateidf(V,N)
         print("V")
         print(V)
         print("idf")
         print(idf)
 
         #tf.idf for document
+
         Dh={}
-        for word in tfD:
-            Dh[word]=tfD[word]*idf[word]
+        Dh = CalcProductDoc(tfD, idf)
+
 
         #tf.idf for topic
         Th={}
-        for word in tfT:
-            Th[word]=tfT[word]*idf[word]
+        Th = CalcProductTopic(tfT,idf)
+
         #print(Dh)
         #print(Th)
         '''
@@ -167,26 +216,8 @@ for doc in docs:
         #print(Dh)
 
         #Step3: Story similarity computation
-        Dh_Th=0
-        DhSquared=0
-        ThSquared=0
-        for word in V:
-            if word in Dh:
-                Dvalue=Dh[word]
-            else:
-                Dvalue=0
-            if word in Th:
-                Tvalue=Th[word]
-            else:
-                Tvalue=0
-
-            Dh_Th+=1.0*Dvalue*Tvalue
-            #print(Dh_Th)
-            DhSquared+=1.0*Dvalue*Dvalue
-            ThSquared+=1.0*Tvalue*Tvalue
-        cosineDeno=math.sqrt(DhSquared*ThSquared)
-        similarity=float(Dh_Th)/cosineDeno
-        print(similarity)
+        similarityValue=similarity(Dh,Th)
+        print(similarityValue)
         #for each 'h' in 'T' do
         ####'Dh*Th'+='Dh'*'Th' #where Dh = tf.idf for term h
         ####'DhSquared'+=squared('Dh')
