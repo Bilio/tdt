@@ -8,15 +8,20 @@ import os
 '''
 
 #Step 1: TOPIC REPRESENTATION
-def tokenizeAndTopicVectorCreation(fileoutput,T):
+def tokenizeAndTopicVectorCreation(fileoutput,T,tfRaw):
+    words = fileoutput.split()
+    length = len(words)
+    T.extend(words)
+    DVector = set()
+    for word in words:
+        DVector.add(word)
+        if word not in tfRaw:
+            tfRaw[word]=1
+        else:
+            tfRaw[word]+=1
 
- words = fileoutput.split()
- length = len(words)
- T.extend(words)
- DVector = set()
- for word in words:
-  DVector.add(word)
- return DVector,T,length
+
+    return DVector,T,length
 
 def extractVocab(V,DVector):
  #print(DVector)
@@ -31,36 +36,46 @@ def extractVocab(V,DVector):
 #def dfUpdate(V,DVector):
 
 
-topicsFolder = "/Users/vibhabhambhani/Desktop/NLP/Project/sample data 2"
+topicsFolder = "/Users/vibhabhambhani/Desktop/NLP/Project/trainingData"
 
+#Define folder for topic outputs
+topicsFile=open("topics.txt","w")
 #Read a folder containing 4 documents of the topic
-listOfDirectories = next(os.walk(topicsFolder))[1]
-for directories in listOfDirectories:
+listOfTopics = next(os.walk(topicsFolder))[1]
+dictionaryOfTopics=[]
+for topic in listOfTopics:
   T=[]
-  print(directories)
-  z = os.path.join(topicsFolder,directories)
+  tfRaw={}
+  print(topic)
+  z = os.path.join(topicsFolder,topic)
   docs=[]
   V={}
   for item in os.listdir(z):
    if not item.startswith('.') and os.path.isfile(os.path.join(z, item)):
         docs.append(os.path.join(z, item))
-   n=set()
+   uniqueWordsInDoc=set()
   lengthofdocs = 0
 
 #For each document split by words
   for doc in docs:
      DVector = {}
      fileop = open(doc,"r")
-     n,T,length= tokenizeAndTopicVectorCreation(fileop.read(),T)
+     uniqueWordsInDoc,T,length= tokenizeAndTopicVectorCreation(fileop.read(),T,tfRaw)
      lengthofdocs = lengthofdocs+length
-     V = extractVocab(V,n)
+     V = extractVocab(V,uniqueWordsInDoc)
   #print("Topic Vector")
   #print T
   #print("Vocabulary")
   #print(V)
   print("Length")
-  lenAvg=lengthofdocs/4
-  N=4
+  lenAvg=lengthofdocs/2
+  N=2
+  for i in tfRaw:
+      tfRaw[i]=float(tfRaw[i])/lengthofdocs
+  dictionaryOfTopics.append({'topic':topic,'T':T,'V':V,'lenAvg':lenAvg,'N':N,'tfRaw':tfRaw,'length':lengthofdocs})
+print(dictionaryOfTopics)
+pickle.dump(dictionaryOfTopics,topicsFile)
+
 
 ####append splitted-document to the topic vector
 ####create a vocabulary V which will contain a list of words and the
