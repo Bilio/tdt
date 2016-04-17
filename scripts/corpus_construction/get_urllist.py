@@ -77,7 +77,6 @@ for i in range(1,46):
     except:
         pass
 
-
 vehicle_main_url = 'http://tamil.thehindu.com/business/article6426694.ece?widget-art=four-rel'
 vehicle_urllist = []
 url = vehicle_main_url
@@ -86,3 +85,30 @@ html = response.read()
 soup = BeautifulSoup(html, 'html.parser')
 heading_class = filter(lambda y: u'body' == y['id'], filter(lambda x: x.has_attr('id'), soup.find_all('div')))
 vehicle_urllist = map(lambda x: x.a['href'], heading_class[0].find_all('h3'))
+
+ciff_main_url = 'http://tamil.thehindu.com/cinema/ciff/?pageNo=%d'
+ciff_urllist = []
+for i in range(1, 15):
+    url = ciff_main_url%i
+    try:
+        response = urllib2.urlopen(url)
+        html = response.read()
+        soup = BeautifulSoup(html, 'html.parser')
+        heading_class = filter(lambda y: u'headlinessub' in y['class'], filter(lambda x: x.has_attr('class'), soup.find_all('div')))
+        ciff_urllist += map(lambda x: x.a['href'], heading_class[0].find_all('h3'))
+    except:
+        pass
+
+c_floods_urllist = []
+for i in range(1, 30):
+    try:
+        chennai_floods_main_url = 'http://www.dinamani.com/search/simple.do;jsessionid=6111872D6A22223E7866A642FD99CF11.jvm1?destinationSectionId=379&publicationName=dn&sortString=score&sortOrder=desc&sectionId=227&articleTypes=news+gallery+ventunoVideo+youtubeVideo+grabNetworksVideo&pageNumber=' + str(i) + '&pageLength=15&searchString=%E0%AE%9A%E0%AF%86%E0%AE%A9%E0%AF%8D%E0%AE%A9%E0%AF%88%E0%AE%AF%E0%AE%BF%E0%AE%B2%E0%AF%8D+%E0%AE%AA%E0%AE%B2%E0%AE%A4%E0%AF%8D%E0%AE%A4+%E0%AE%AE%E0%AE%B4%E0%AF%88'
+        url = chennai_floods_main_url.encode('utf-8')
+        response = urllib2.urlopen(url, timeout=10)
+        html = response.read()
+        soup = BeautifulSoup(html, 'html.parser')
+        heading_class = filter(lambda y: u'resultTitle' in y['class'], filter(lambda x: x.has_attr('class'), soup.find_all('span')))
+        c_floods_urllist += map(lambda x: x.a['href'], heading_class)
+    except:
+        pass
+print len(c_floods_urllist)
