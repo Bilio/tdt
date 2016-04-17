@@ -47,7 +47,6 @@ def calculatetfT(tfRaw,length):
             tfT[i]=float(tfRaw[i])/(tfRaw[i]+0.5+1.5*(length/lenAvg))
     return tfT
 
-
 def calculateidf(V,N):
     idf={}
     for word in V:
@@ -57,12 +56,12 @@ def calculateidf(V,N):
         idf[word]=Nor/math.log((N+1),10)
     return idf
 
-
 def CalcProductDoc(tfD, idf):
     Dh ={}
     for word in tfD:
             Dh[word]=tfD[word]*idf[word]
     return Dh
+
 def CalcProductTopic(tfT,idf):
     Th ={}
     for word in tfT:
@@ -88,6 +87,8 @@ def similarity(Dh,Th):
         DhSquared+=1.0*Dvalue*Dvalue
         ThSquared+=1.0*Tvalue*Tvalue
     cosineDeno=math.sqrt(DhSquared*ThSquared)
+    if cosineDeno==0:
+        cosineDeno=0.00000001
     similarity=float(Dh_Th)/cosineDeno
     return similarity
 
@@ -111,6 +112,13 @@ for item in os.listdir(inputFolder):
    if not item.startswith('.') and os.path.isfile(os.path.join(inputFolder, item)):
         docs.append(os.path.join(inputFolder, item))
 
+root = inputFolder
+
+for topic  in topics:
+    #print(listoffolders)
+    dir_path = os.path.join(root, topic['topic'])
+    if not os.path.isdir(dir_path):
+        os.makedirs(dir_path)
 #For each document
 for doc in docs:
     #### split by words
@@ -120,12 +128,13 @@ for doc in docs:
     tfRawD={}
     uniqueWordsInDoc,DVector,lenD,tfRawD= tokenizeAndDocumentVectorCreation(docOpen.read(),tfRawD)
 
-    ####create a vocabulary V which will contain a list of words and the
+
     for topic in topics:
         #dictionaryOfTopics.append({'topic':topic,'T':T,'V':V,'lenAvg':lenAvg,'N':N})
 
         #### df of the words
         #print(topic['V'])
+        ####create a vocabulary V which will contain a list of words and the
         V=extractVocab(topic['V'],uniqueWordsInDoc)
 
         #print(V)
@@ -224,3 +233,16 @@ for doc in docs:
         ####'ThSquared'+=squared('Th')
         #'cosineDeno'=sqrt('DhSquared'*'ThSquared')
         #similarity(D,T)='Dh*Th'/'cosineDeno'
+
+        #Step4: Normalization
+        normalizedValue=similarityValue/topic['Z']
+        print(normalizedValue)
+
+        #Step5: Threshold comparision
+        if normalizedValue>=0.13:
+            print "DOCUMENT BELONGS TO TOPIC "+topic['topic']
+            filename = doc
+            output = open(os.path.join(dir_path, filename), 'wb')
+            output.write(docOpen.read())
+            output.close()
+
