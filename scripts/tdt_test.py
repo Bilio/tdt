@@ -1,4 +1,4 @@
-__author__ = 'Vibha Bhambhani'
+__author__ = 'Vibha Bhambhani and Shakshi Maheswari'
 import os
 import pickle
 import math
@@ -6,10 +6,11 @@ from config import MODEL_FILE
 from config import TDT_OUT_DIR
 from config import TDT_TEST_DIR
 from config import LOG_FOLDER
+from fileReader import FileReader
 
-
-def tokenizeAndDocumentVectorCreation(fileoutput,tfRawD):
-    words = fileoutput.split()
+def tokenizeAndDocumentVectorCreation(fileObj,tfRawD):
+    fileContent = FileReader(fileObj).content
+    words = fileContent.split()
     length = len(words)
     uniqueWordsInDoc = set()
     for word in words:
@@ -116,17 +117,15 @@ outputFile   = os.path.join(LOG_FOLDER, 'output.txt')
 docs = filter(lambda x: not x.startswith('.') and os.path.isfile(os.path.join(TDT_TEST_DIR, x)),
                           os.listdir(TDT_TEST_DIR))
 root = TDT_OUT_DIR
-for topic  in topics:
+for topic in topics:
     dir_path = os.path.join(root, topic['topic'])
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
 
 for doc in docs:
-    DVector = []
-    uniqueWordsInDoc = set()
-    docOpen = open(doc,"r")
+    docOpen = open(os.path.join(TDT_TEST_DIR, doc), "r")
     tfRawD = {}
-    uniqueWordsInDoc, DVector, lenD, tfRawD = tokenizeAndDocumentVectorCreation(docOpen.read(),tfRawD)
+    uniqueWordsInDoc, DVector, lenD, tfRawD = tokenizeAndDocumentVectorCreation(docOpen,tfRawD)
 
     for topic in topics:
         V = extractVocab(topic['V'],uniqueWordsInDoc)
@@ -182,7 +181,6 @@ for doc in docs:
         #Step5: Threshold comparision
         if normalizedValue >= 0.13:
             # print "DOCUMENT BELONGS TO TOPIC "+ topic['topic']
-            filename = doc
-            output = open(os.path.join(dir_path, filename), 'wb')
+            output = open(os.path.join(TDT_OUT_DIR, topic['topic'], doc), 'wb')
             output.write(docOpen.read())
             output.close()
