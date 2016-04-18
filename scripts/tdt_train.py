@@ -1,4 +1,4 @@
-__author__ = 'Vibha Bhambhani and Sakshi Maheswari'
+__author__ = 'Vibha Bhambhani and Shakshi Maheswari'
 import pickle
 import os
 import math
@@ -106,76 +106,77 @@ def similarity(Dh, Th):
     similarity = float(Dh_Th) / cosineDeno * 1.0
     return similarity
 
-# Define folder for topic outputs
-topicsFile = open(MODEL_FILE, 'wb')
+if __name__ == '__main__':
+    # Define folder for topic outputs
+    topicsFile = open(MODEL_FILE, 'wb')
 
-# Read a folder containing 4 documents of the topic
-try:
-    listOfTopics = filter(lambda x: not x.startswith('.'), os.listdir(TDT_DEV_DIR))
-except:
-    raise RuntimeError('The directory "%s" does not exist.' % TDT_DEV_DIR)
+    # Read a folder containing 4 documents of the topic
+    try:
+        listOfTopics = filter(lambda x: not x.startswith('.'), os.listdir(TDT_DEV_DIR))
+    except:
+        raise RuntimeError('The directory "%s" does not exist.' % TDT_DEV_DIR)
 
-dictionaryOfTopics = []
+    dictionaryOfTopics = []
 
-for topic in listOfTopics:
-    T = []
-    tfRaw = {}
-    V = {}
-    topicPath = os.path.join(TDT_DEV_DIR, topic)
-    docsList = filter(lambda x: not x.startswith('.') and os.path.isfile(os.path.join(topicPath, x)),
-                      os.listdir(topicPath))
-    uniqueWordsInDoc = None
-    topicWordCount = 0
-    for document in docsList:
-        DVector = {}
-        fileObj = open(os.path.join(topicPath, document), 'r')
-        uniqueWordsInDoc, wordCount = tokenizeAndTopicVectorCreation(fileObj, T, tfRaw)
-        topicWordCount += wordCount
-        V = extractVocab(V, uniqueWordsInDoc)
-    avgLength = topicWordCount
-    N = 1
-    for i in tfRaw:
-        tfRaw[i] = float(tfRaw[i]) / topicWordCount
-    topicInfo = {'topic': topic,
-                               'T': T,
-                               'V': V,
-                               'lenAvg': avgLength,
-                               'N': N,
-                               'tfRaw': tfRaw,
-                               'length': topicWordCount,
-                               }
-    dictionaryOfTopics.append(topicInfo)
-    similarityValueSum = 0
-    similarityValue = 0
-    for document in docsList:
-        tfRawD = {}
-        fileObj = open(os.path.join(topicPath, document), "r")
-        uniqueWordsInDoc, DVector, lenD, tfRawD = tokenizeAndDocumentVectorCreation(fileObj, tfRawD)
-        tfD = {}
-        tfD = calcluatetfD(tfRawD, lenD, topicInfo['lenAvg'])
+    for topic in listOfTopics:
+        T = []
+        tfRaw = {}
+        V = {}
+        topicPath = os.path.join(TDT_DEV_DIR, topic)
+        docsList = filter(lambda x: not x.startswith('.') and os.path.isfile(os.path.join(topicPath, x)),
+                          os.listdir(topicPath))
+        uniqueWordsInDoc = None
+        topicWordCount = 0
+        for document in docsList:
+            DVector = {}
+            fileObj = open(os.path.join(topicPath, document), 'r')
+            uniqueWordsInDoc, wordCount = tokenizeAndTopicVectorCreation(fileObj, T, tfRaw)
+            topicWordCount += wordCount
+            V = extractVocab(V, uniqueWordsInDoc)
+        avgLength = topicWordCount
+        N = 1
+        for i in tfRaw:
+            tfRaw[i] = float(tfRaw[i]) / topicWordCount
+        topicInfo = {'topic': topic,
+                                   'T': T,
+                                   'V': V,
+                                   'lenAvg': avgLength,
+                                   'N': N,
+                                   'tfRaw': tfRaw,
+                                   'length': topicWordCount,
+                                   }
+        dictionaryOfTopics.append(topicInfo)
+        similarityValueSum = 0
+        similarityValue = 0
+        for document in docsList:
+            tfRawD = {}
+            fileObj = open(os.path.join(topicPath, document), "r")
+            uniqueWordsInDoc, DVector, lenD, tfRawD = tokenizeAndDocumentVectorCreation(fileObj, tfRawD)
+            tfD = {}
+            tfD = calcluatetfD(tfRawD, lenD, topicInfo['lenAvg'])
 
-        # Calculated tfT --- tf of Topic
-        tfT = {}
-        tfT = calculatetfT(topicInfo['tfRaw'], topicInfo['length'], topicInfo['lenAvg'])
+            # Calculated tfT --- tf of Topic
+            tfT = {}
+            tfT = calculatetfT(topicInfo['tfRaw'], topicInfo['length'], topicInfo['lenAvg'])
 
-        # update idf statistics
-        idf = {}
-        idf = calculateidf(V, N)
+            # update idf statistics
+            idf = {}
+            idf = calculateidf(V, N)
 
-        # tf.idf for document
-        Dh = {}
-        Dh = CalcProductDoc(tfD, idf)
+            # tf.idf for document
+            Dh = {}
+            Dh = CalcProductDoc(tfD, idf)
 
-        # tf.idf for topic
-        Th = {}
-        Th = CalcProductTopic(tfT, idf)
+            # tf.idf for topic
+            Th = {}
+            Th = CalcProductTopic(tfT, idf)
 
-        # Step3: Story similarity computation
-        similarityValue = similarity(Dh, Th)
-        similarityValueSum += similarityValue
+            # Step3: Story similarity computation
+            similarityValue = similarity(Dh, Th)
+            similarityValueSum += similarityValue
 
-    similarityValueSum /= topicInfo['N']
-    topicInfo['Z'] = similarityValueSum
+        similarityValueSum /= topicInfo['N']
+        topicInfo['Z'] = similarityValueSum
 
-pickle.dump(dictionaryOfTopics, topicsFile)
+    pickle.dump(dictionaryOfTopics, topicsFile)
 
