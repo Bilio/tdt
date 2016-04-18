@@ -1,17 +1,11 @@
-from xml.dom.minidom import parse
-
+import traceback
 
 class FileReader(object):
     def __init__(self, fileObj):
-        self.content = ''
-        try:
-            DOMTree = parse(fileObj)
-            news = DOMTree.documentElement
-            self.content += news.getElementsByTagName('headline')[0].childNodes[0].data
-            self.content += '\n'
-            self.content += news.getElementsByTagName('description')[0].childNodes[0].data
-        except:
-            raise RuntimeError('Error in parsing file: "%s"' % (fileObj.name))
+        data = fileObj.read()
+        data = data.replace('<news>','').replace('</news>','').replace('<headline>','').replace('</headline>','')
+        data = data.replace('<description>','').replace('</description>','')
+        self.content = data
 
 if __name__ == '__main__':
     import os

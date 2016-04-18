@@ -1,4 +1,4 @@
-__author__ = 'Vibha Bhambhani'
+__author__ = 'Vibha Bhambhani and Shakshi Maheswari'
 import os
 import pickle
 import math
@@ -6,10 +6,11 @@ from config import MODEL_FILE
 from config import TDT_OUT_DIR
 from config import TDT_TEST_DIR
 from config import LOG_FOLDER
+from fileReader import FileReader
 
-
-def tokenizeAndDocumentVectorCreation(fileoutput,tfRawD):
-    words = fileoutput.split()
+def tokenizeAndDocumentVectorCreation(fileObj,tfRawD):
+    fileContent = FileReader(fileObj).content
+    words = fileContent.split()
     length = len(words)
     uniqueWordsInDoc = set()
     for word in words:
@@ -57,27 +58,25 @@ def calculatetfT(tfRaw,length):
     return tfT
 
 
-def calculateidf(V,N):
+def calculateidf(V , N):
     idf={}
     for word in V:
-        print("N")
-        print(N)
-        Nor=(math.log((1.0*N/V[word]),10))
-        idf[word]=Nor/math.log((N+1),10)
+        Nor=math.log10(N) - math.log10(V[word])
+        idf[word]= Nor / math.log((N+1),10)
     return idf
 
 
 def CalcProductDoc(tfD, idf):
     Dh ={}
     for word in tfD:
-            Dh[word]=tfD[word]*idf[word]
+            Dh[word]=tfD[word] * idf[word]
     return Dh
 
 
 def CalcProductTopic(tfT,idf):
     Th ={}
     for word in tfT:
-            Th[word]=tfT[word]*idf[word]
+            Th[word]=tfT[word] * idf[word]
     return Th
 
 
@@ -96,7 +95,6 @@ def similarity(Dh,Th):
             Tvalue=0
 
         Dh_Th+=1.0*Dvalue*Tvalue
-        #print(Dh_Th)
         DhSquared+=1.0*Dvalue*Dvalue
         ThSquared+=1.0*Tvalue*Tvalue
     cosineDeno=math.sqrt(DhSquared*ThSquared)
@@ -116,17 +114,15 @@ outputFile   = os.path.join(LOG_FOLDER, 'output.txt')
 docs = filter(lambda x: not x.startswith('.') and os.path.isfile(os.path.join(TDT_TEST_DIR, x)),
                           os.listdir(TDT_TEST_DIR))
 root = TDT_OUT_DIR
-for topic  in topics:
+for topic in topics:
     dir_path = os.path.join(root, topic['topic'])
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
 
 for doc in docs:
-    DVector = []
-    uniqueWordsInDoc = set()
-    docOpen = open(doc,"r")
+    docOpen = open(os.path.join(TDT_TEST_DIR, doc), "r")
     tfRawD = {}
-    uniqueWordsInDoc, DVector, lenD, tfRawD = tokenizeAndDocumentVectorCreation(docOpen.read(),tfRawD)
+    uniqueWordsInDoc, DVector, lenD, tfRawD = tokenizeAndDocumentVectorCreation(docOpen,tfRawD)
 
     for topic in topics:
         V = extractVocab(topic['V'],uniqueWordsInDoc)
@@ -177,12 +173,9 @@ for doc in docs:
 
         #Step4: Normalization
         normalizedValue=similarityValue/topic['Z']
-        print(normalizedValue)
 
         #Step5: Threshold comparision
         if normalizedValue >= 0.13:
-            # print "DOCUMENT BELONGS TO TOPIC "+ topic['topic']
-            filename = doc
-            output = open(os.path.join(dir_path, filename), 'wb')
+            output = open(os.path.join(TDT_OUT_DIR, topic['topic'], doc), 'wb')
             output.write(docOpen.read())
             output.close()
