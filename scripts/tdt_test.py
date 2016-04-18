@@ -4,6 +4,7 @@ import pickle
 import math
 from config import MODEL_FILE
 from config import TDT_OUT_DIR
+from config import TDT_TEST_DIR
 from config import LOG_FOLDER
 
 
@@ -111,148 +112,77 @@ topics = pickle.load(open( MODEL_FILE, "rb" ))
 #Define folder for topic outputs
 outputFile   = os.path.join(LOG_FOLDER, 'output.txt')
 
-#Read the input folder
-inputFolder = "/Users/vibhabhambhani/Desktop/NLP/Project/inputData"
-
-#docs list containing the list of documents inputFolder
-docs=[]
-
 #Read documents in the input folder in the docs list
-for item in os.listdir(inputFolder):
-   if not item.startswith('.') and os.path.isfile(os.path.join(inputFolder, item)):
-        docs.append(os.path.join(inputFolder, item))
-
-root = inputFolder
-
+docs = filter(lambda x: not x.startswith('.') and os.path.isfile(os.path.join(TDT_TEST_DIR, x)),
+                          os.listdir(TDT_TEST_DIR))
+root = TDT_OUT_DIR
 for topic  in topics:
-    #print(listoffolders)
     dir_path = os.path.join(root, topic['topic'])
-    if not os.path.isdir(dir_path):
-        os.makedirs(dir_path)
-#For each document
-for doc in docs:
-    #### split by words
-    DVector=[]
-    uniqueWordsInDoc=set()
-    docOpen = open(doc,"r")
-    tfRawD={}
-    uniqueWordsInDoc,DVector,lenD,tfRawD= tokenizeAndDocumentVectorCreation(docOpen.read(),tfRawD)
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
 
+for doc in docs:
+    DVector = []
+    uniqueWordsInDoc = set()
+    docOpen = open(doc,"r")
+    tfRawD = {}
+    uniqueWordsInDoc, DVector, lenD, tfRawD = tokenizeAndDocumentVectorCreation(docOpen.read(),tfRawD)
 
     for topic in topics:
-        #dictionaryOfTopics.append({'topic':topic,'T':T,'V':V,'lenAvg':lenAvg,'N':N})
-
-        #### df of the words
-        #print(topic['V'])
-        ####create a vocabulary V which will contain a list of words and the
-        V=extractVocab(topic['V'],uniqueWordsInDoc)
-
-        #print(V)
-        ####lenAvg documents
-        lenAvg=0
-        lenAvg=updateAvgLength(topic['lenAvg'],lenD,topic['N'])
-        #print(lenAvg)
-        ####update N
-        N=0
+        V = extractVocab(topic['V'],uniqueWordsInDoc)
+        lenAvg = updateAvgLength(topic['lenAvg'],lenD,topic['N'])
         N=updateN(topic['N'])
-        #print(N)
-        ###tdf
-        '''
-        #Step2: TF-IDF SCORE COMPUTATION
-        #   tf =         tfRaw
-        #       ---------------------
-        #       tfRaw +0.5 +1.5 *  lenD
-        #                         ------
-        #                         lenAng
-        #take as input a folder path which contains documents to be classified
-
-        #for each document in the folder
-
-        #construct D vector
-
-        #TF SCORE COMPUTATION
-
+        """
+        Step2: TF-IDF SCORE COMPUTATION
+          tf =         tfRaw
+              ---------------------
+              tfRaw +0.5 +1.5 *  lenD
+                                ------
+                                lenAng
+        take as input a folder path which contains documents to be classified
+        for each document in the folder
+        construct D vector
+        TF SCORE COMPUTATION
         #get the "lenD" length of the document value
         #update the "lenAvg" the average length of document value (use N and lenAvg and lenD)
         #get all the unique words in a set for D_raw
         #get all the raw frequencies of the unique words found in D_raw and store them in a dictionary "tf_raw" which contains
         ## [term]:number of occurrences in document D
         #calculate "tf" dictionary [terms]:modified values -- incorporating the length feature
-        '''
-        #Calculated tfD --- tf of Document
-        print(tfRawD.__len__())
-        print(uniqueWordsInDoc.__len__())
-        print("tfRawD and uniqueWords")
-        print(tfRawD)
-        print(uniqueWordsInDoc)
-        print("tfRaw of topic")
-        print(topic['tfRaw'])
-        tfD={}
+        """
         tfD = calcluatetfD(tfRawD,lenD,lenAvg)
-        print("tfD")
-        print(tfD)
-        #Calculated tfT --- tf of Topic
-        tfT={}
         tfT = calculatetfT(topic['tfRaw'],topic['length'])
-        print("tfT")
-        print(tfT)
 
         #IDF SCORE COMPUTATION
         #update idf statistics
-        idf={}
         idf = calculateidf(V,N)
-        print("V")
-        print(V)
-        print("idf")
-        print(idf)
 
         #tf.idf for document
-
-        Dh={}
         Dh = CalcProductDoc(tfD, idf)
 
-
         #tf.idf for topic
-        Th={}
         Th = CalcProductTopic(tfT,idf)
 
-        #print(Dh)
-        #print(Th)
-        '''
+        """
         #update the 'N' number of documents count
-
         #update the vocabulary V which has document frequency in it. df --- for already existing words update the score ---- for new words add them to the vocabulary
         ##with the no.docs they appear in ---'V'dictionary [term]:no.of docs the term appears in---
-
         #calculate 'idf' scores for all terms in 'D_raw' using 'V' and 'N'values
-
         #Compute tf.idf
-
-
         #apply tf.idf dictionary [term]:value weighting to D and T vectors --- 2 tf.idf dictionaries -- one for D and one for T
-
-        '''
-        #print(Dh)
+        """
 
         #Step3: Story similarity computation
         similarityValue=similarity(Dh,Th)
-        print(similarityValue)
-        #for each 'h' in 'T' do
-        ####'Dh*Th'+='Dh'*'Th' #where Dh = tf.idf for term h
-        ####'DhSquared'+=squared('Dh')
-        ####'ThSquared'+=squared('Th')
-        #'cosineDeno'=sqrt('DhSquared'*'ThSquared')
-        #similarity(D,T)='Dh*Th'/'cosineDeno'
 
         #Step4: Normalization
         normalizedValue=similarityValue/topic['Z']
         print(normalizedValue)
 
         #Step5: Threshold comparision
-        if normalizedValue>=0.13:
-            print "DOCUMENT BELONGS TO TOPIC "+topic['topic']
+        if normalizedValue >= 0.13:
+            # print "DOCUMENT BELONGS TO TOPIC "+ topic['topic']
             filename = doc
             output = open(os.path.join(dir_path, filename), 'wb')
             output.write(docOpen.read())
             output.close()
-

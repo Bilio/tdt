@@ -1,5 +1,0 @@
-<news>
-<headline>டாப் 5 படங்கள்</headline>
-<description>
-வலியவன் - டிரெய்லர்வலியவன் - ப்ரோமோ சாங்வலியவன் - டீசர்</description>
-</news>

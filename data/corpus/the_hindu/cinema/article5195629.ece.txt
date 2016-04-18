@@ -1,5 +1,0 @@
-<news>
-<headline>சிக்ஸ் பேக்கில் கரீனா கபூர்!</headline>
-<description>
-'Shuddhi' என்னும் இந்தி படத்திற்காக சிக்ஸ் பேக் வைக்கவிருக்கிறார் கரீனா கபூர்.</description>
-</news>

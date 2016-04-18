@@ -1,5 +1,0 @@
-<news>
-<headline>ஆன் தி ஸ்லை: குழந்தைகளுக்குப் பிடித்த வாழ்க்கை</headline>
-<description>
-on the sly</description>
-</news>

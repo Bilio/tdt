@@ -1,5 +1,0 @@
-<news>
-<headline>இதோ இன்னொரு கிம் கி டுக் படம்!</headline>
-<description>
-Moebius | Moebiuseu | Dir.: Kim ki Duk | Korea |2013| 89'| WC</description>
-</news>
