@@ -133,8 +133,9 @@ if __name__ == '__main__':
             uniqueWordsInDoc, wordCount = tokenizeAndTopicVectorCreation(fileObj, T, tfRaw)
             topicWordCount += wordCount
             V = extractVocab(V, uniqueWordsInDoc)
-        avgLength = topicWordCount
         N = 1
+        avgLength = topicWordCount/N
+
         for i in tfRaw:
             tfRaw[i] = float(tfRaw[i]) / topicWordCount
         topicInfo = {'topic': topic,
