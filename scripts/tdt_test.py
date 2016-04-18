@@ -122,6 +122,7 @@ for topic in topics:
         os.mkdir(dir_path)
 
 for doc in docs:
+    results = []
     logger.write('DOC NAME: %s\n'%(os.path.join(TDT_TEST_DIR, doc)))
     docOpen = open(os.path.join(TDT_TEST_DIR, doc), "r")
     tfRawD = {}
@@ -176,10 +177,14 @@ for doc in docs:
 
         #Step4: Normalization
         normalizedValue=similarityValue/topic['Z']
-        logger.write('%s%s%s\n'%(topic['topic'],'==',normalizedValue))
-        #Step5: Threshold comparision
-        if normalizedValue >= 0.13:
-            output = open(os.path.join(TDT_OUT_DIR, topic['topic'], doc), 'wb')
-            output.write(docOpen.read())
-            output.close()
+
+        results.append([topic['topic'],normalizedValue])
+
+    results = sorted(results, key=lambda x: x[1], reverse=True)
+    # import pdb; pdb.set_trace()
+    logger.write('\n'.join(map(lambda x: '%s==%s'%(x[0],x[1]), results)))
+    logger.write('\n')
+    output = open(os.path.join(TDT_OUT_DIR, results[0][0], doc), 'wb')
+    output.write(docOpen.read())
+    output.close()
     logger.write('--------------------------------------------\n')
