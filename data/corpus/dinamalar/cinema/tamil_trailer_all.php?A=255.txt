@@ -1,5 +1,0 @@
-<news>
-<headline>டாப் 5 படங்கள்</headline>
-<description>
-நாலு போலிசும் நல்ல இருந்த ஊரும் - டீசர்</description>
-</news>

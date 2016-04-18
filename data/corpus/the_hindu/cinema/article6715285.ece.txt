@@ -1,5 +1,0 @@
-<news>
-<headline>Melbourne: தேடிவந்த வம்பு</headline>
-<description>
-Melbourne/Iran/Nima Javidi /95’/2014</description>
-</news>

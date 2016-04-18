@@ -1,5 +1,0 @@
-<news>
-<headline>ஹங்கேரிய தூதரகமும் இரண்டு நபர்களும்</headline>
-<description>
-Ambassador to Bern | A berni követ | Dir.: Attila Szász | Hungary| 2014 | 76' |</description>
-</news>

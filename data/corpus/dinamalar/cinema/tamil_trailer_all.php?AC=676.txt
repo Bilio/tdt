@@ -1,5 +1,0 @@
-<news>
-<headline>டாப் 5 படங்கள்</headline>
-<description>
-யட்சன் - 'காக்காபொண்ணு'  சாங்யட்சன் - டிரைலர்யட்சன்  டீசர்</description>
-</news>

@@ -1,5 +1,0 @@
-<news>
-<headline>குழந்தைகளின் தூய்மைகெடாத மனஉலகம்</headline>
-<description>
-Film: Where is the Friend's Home?</description>
-</news>

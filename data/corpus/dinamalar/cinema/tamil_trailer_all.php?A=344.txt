@@ -1,5 +1,0 @@
-<news>
-<headline>டாப் 5 படங்கள்</headline>
-<description>
-கெத்துநண்பேண்டா - டிரைலர்நண்பேண்டா - சாங் டீசர்நண்பேண்டா முன்னோட்டம்</description>
-</news>
