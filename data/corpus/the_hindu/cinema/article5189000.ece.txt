@@ -1,5 +1,0 @@
-<news>
-<headline>சர்ச்சையில் சிக்கும் ராம்கோபால்வர்மா!</headline>
-<description>
-'Attarintiki Daredi' படத்தின் வசூல் ஒட்டுமொத்த இந்திய திரையுலகின் கவனத்தையும் ஈர்த்துள்ளது.</description>
-</news>

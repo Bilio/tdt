@@ -1,5 +1,0 @@
-<news>
-<headline>திரை விமர்சனம்: ஜீரோ</headline>
-<description>
-அஸ்வினும்</description>
-</news>

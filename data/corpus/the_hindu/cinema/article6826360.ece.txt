@@ -1,5 +1,0 @@
-<news>
-<headline>விடைபெறாத கேள்விகள்</headline>
-<description>
-Film: Goodbye Children</description>
-</news>

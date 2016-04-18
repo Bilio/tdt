@@ -1,5 +1,0 @@
-<news>
-<headline>டாப் 5 படங்கள்</headline>
-<description>
-சாஹசம் - சாங் மேக்கிங்சாஹாசம் - ப்ரோமோ</description>
-</news>

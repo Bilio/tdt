@@ -1,5 +1,0 @@
-<news>
-<headline>கோலிவுட் கிச்சடி: அஜித் 57</headline>
-<description>
-முதல் கூட்டணி!</description>
-</news>

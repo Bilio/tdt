@@ -1,5 +1,0 @@
-<news>
-<headline>ஆஸ்கர் 2015 பரிந்துரைப் பட்டியலில் இந்தியாவுக்கு ஏமாற்றம்</headline>
-<description>
-</description>
-</news>

@@ -1,5 +1,0 @@
-<news>
-<headline>ஆஸ்கர் 2015 பரிந்துரைகள்: 'பேர்ட்மேன்', 'தி கிராண்ட் புடாபெஸ் ஹோட்டல்' ஆதிக்கம்</headline>
-<description>
-</description>
-</news>

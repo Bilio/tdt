@@ -1,5 +1,0 @@
-<news>
-<headline>வாழ்வின் சுவை: ஒரு வேலை இருக்கு, செய்றீங்களா?</headline>
-<description>
-Taste of Cherry (1997) | Directed by Abbas Kiarostami</description>
-</news>

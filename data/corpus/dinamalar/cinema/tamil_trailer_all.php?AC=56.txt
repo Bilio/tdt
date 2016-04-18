@@ -1,5 +1,0 @@
-<news>
-<headline>டாப் 5 படங்கள்</headline>
-<description>
-பாயும் புலி - ப்ரோமோபாயும் புலி - டிரைலர்மாரி-  டீசர்</description>
-</news>

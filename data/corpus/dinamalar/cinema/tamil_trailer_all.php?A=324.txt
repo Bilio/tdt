@@ -1,5 +1,0 @@
-<news>
-<headline>டாப் 5 படங்கள்</headline>
-<description>
-தாக்க தாக்க - மோஷன் போஸ்டர்</description>
-</news>
