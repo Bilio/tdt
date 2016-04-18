@@ -110,6 +110,8 @@ topics = pickle.load(open( MODEL_FILE, "rb" ))
 #Define folder for topic outputs
 outputFile   = os.path.join(LOG_FOLDER, 'output.txt')
 
+logger = open(outputFile, 'w')
+
 #Read documents in the input folder in the docs list
 docs = filter(lambda x: not x.startswith('.') and os.path.isfile(os.path.join(TDT_TEST_DIR, x)),
                           os.listdir(TDT_TEST_DIR))
@@ -120,6 +122,7 @@ for topic in topics:
         os.mkdir(dir_path)
 
 for doc in docs:
+    logger.write('DOC NAME: %s\n'%(os.path.join(TDT_TEST_DIR, doc)))
     docOpen = open(os.path.join(TDT_TEST_DIR, doc), "r")
     tfRawD = {}
     uniqueWordsInDoc, DVector, lenD, tfRawD = tokenizeAndDocumentVectorCreation(docOpen,tfRawD)
@@ -173,9 +176,10 @@ for doc in docs:
 
         #Step4: Normalization
         normalizedValue=similarityValue/topic['Z']
-
+        logger.write('%s%s%s\n'%(topic['topic'],'==',normalizedValue))
         #Step5: Threshold comparision
         if normalizedValue >= 0.13:
             output = open(os.path.join(TDT_OUT_DIR, topic['topic'], doc), 'wb')
             output.write(docOpen.read())
             output.close()
+    logger.write('--------------------------------------------\n')
