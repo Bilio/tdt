@@ -21,7 +21,7 @@ def tokenizeAndTopicVectorCreation(fileObj, T, tfRaw):
     return DVector, length
 
 
-def tokenizeAndDocumentVectorCreation(filfileObjeoutput, tfRawD):
+def tokenizeAndDocumentVectorCreation(fileObj, tfRawD):
     fileContent = FileReader(fileObj).content
     words = fileContent.strip().split()
     length = len(words)
