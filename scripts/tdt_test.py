@@ -58,27 +58,25 @@ def calculatetfT(tfRaw,length):
     return tfT
 
 
-def calculateidf(V,N):
+def calculateidf(V , N):
     idf={}
     for word in V:
-        print("N")
-        print(N)
-        Nor=(math.log((1.0*N/V[word]),10))
-        idf[word]=Nor/math.log((N+1),10)
+        Nor=math.log10(N) - math.log10(V[word])
+        idf[word]= Nor / math.log((N+1),10)
     return idf
 
 
 def CalcProductDoc(tfD, idf):
     Dh ={}
     for word in tfD:
-            Dh[word]=tfD[word]*idf[word]
+            Dh[word]=tfD[word] * idf[word]
     return Dh
 
 
 def CalcProductTopic(tfT,idf):
     Th ={}
     for word in tfT:
-            Th[word]=tfT[word]*idf[word]
+            Th[word]=tfT[word] * idf[word]
     return Th
 
 
@@ -97,7 +95,6 @@ def similarity(Dh,Th):
             Tvalue=0
 
         Dh_Th+=1.0*Dvalue*Tvalue
-        #print(Dh_Th)
         DhSquared+=1.0*Dvalue*Dvalue
         ThSquared+=1.0*Tvalue*Tvalue
     cosineDeno=math.sqrt(DhSquared*ThSquared)
@@ -176,11 +173,9 @@ for doc in docs:
 
         #Step4: Normalization
         normalizedValue=similarityValue/topic['Z']
-        print(normalizedValue)
 
         #Step5: Threshold comparision
         if normalizedValue >= 0.13:
-            # print "DOCUMENT BELONGS TO TOPIC "+ topic['topic']
             output = open(os.path.join(TDT_OUT_DIR, topic['topic'], doc), 'wb')
             output.write(docOpen.read())
             output.close()
