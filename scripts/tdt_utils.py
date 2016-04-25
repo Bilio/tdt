@@ -83,5 +83,6 @@ def similarity(Dh, Th, Vocabulary):
     cosineDeno = sqrt(DhSquared * ThSquared)
     return Dh_Th / cosineDeno
 
+
 def updateAvgLength(lenAvg, length, N):
     return (lenAvg * N + length) / (N + 1)
