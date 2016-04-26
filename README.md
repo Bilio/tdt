@@ -3,6 +3,15 @@ AUTOMATED TOPIC DETECTION AND TRACKING
 For News Articles
 -----------------
 
+### Install snowball along with the project (Instructions:)
+1. $ cd <PATH_TO_TDT_PROJECT_FOLDER>
+2. $ cd tdt/scripts/
+3. $ svn co -r 577 svn://snowball.tartarus.org/snowball/trunk/snowball snowball
+4. $ cd snowball
+5. $ svn patch ../tamil-stemmer/snowball-tamil.patch //got tamil patch from https://github.com/rdamodharan/tamil-stemmer
+6. $ make
+
+
 ### Team Members
 | Name                           | Git Account URL                     |
 |--------------------------------|--------------------------------------
