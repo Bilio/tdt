@@ -1,8 +1,31 @@
 from __future__ import division
+
+import popen2
 from math import log10
 from math import sqrt
 from fileReader import FileReader
 
+stemmer = "./snowball/stemwords"
+
+stemmed_words = {}
+
+def stemWord(str):
+    if str in stemmed_words:
+        return stemmed_words[str]
+    fin, fout = popen2.popen2(stemmer + " -l ta")
+    fout.write(str)
+    fout.write("\n")
+    fout.close()
+    res = fin.readlines()
+    fin.close()
+    if not res:
+        stemmed_words[str] = str
+        return str
+    stemmed_words[str] = res[0]
+    return res[0]
+
+def modify_word(str):
+    return stemWord(str)
 
 def createTopicVector(fileObj, T, tfRaw):
     fileContent = FileReader(fileObj).content
@@ -11,6 +34,7 @@ def createTopicVector(fileObj, T, tfRaw):
     DVector = set()
     T.extend(words)
     for word in words:
+        word = modify_word(word)
         DVector.add(word)
         if word not in tfRaw:
             tfRaw[word] = 1
@@ -25,6 +49,7 @@ def createDocumentVector(fileObj, tfRawD):
     length = len(words)
     uniqueWordsInDoc = set()
     for word in words:
+        word = modify_word(word)
         uniqueWordsInDoc.add(word)
         if word not in tfRawD:
             tfRawD[word] = 1
