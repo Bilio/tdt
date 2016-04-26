@@ -7,13 +7,12 @@ from fileReader import FileReader
 def createTopicVector(fileObj, T, tfRaw):
     fileContent = FileReader(fileObj).content
     words = fileContent.strip().split()
-    length = 0
-    DVector = []
+    length = len(words)
+    DVector = set()
+    T.extend(words)
     for word in words:
-        length += 1
-        T.append(word)
+        DVector.add(word)
         if word not in tfRaw:
-            DVector.append(word)
             tfRaw[word] = 1
         else:
             tfRaw[word] += 1
@@ -23,12 +22,11 @@ def createTopicVector(fileObj, T, tfRaw):
 def createDocumentVector(fileObj, tfRawD):
     fileContent = FileReader(fileObj).content
     words = fileContent.strip().split()
-    length = 0
-    uniqueWordsInDoc = []
+    length = len(words)
+    uniqueWordsInDoc = set()
     for word in words:
-        length += 1
+        uniqueWordsInDoc.add(word)
         if word not in tfRawD:
-            uniqueWordsInDoc.append(word)
             tfRawD[word] = 1
         else:
             tfRawD[word] += 1
@@ -55,10 +53,10 @@ def calculateTF(tfRaw, length, avgLength):
 def calculateIdf(V, N):
     idf = {}
     for word in V:
-        if (1.0 * N / V[word]) == 1.0:
-            Num = (1.0 * N / V[word]) - 0.0001
+        if (N / V[word]) == 1.0:
+            Num = (N / V[word]) - 0.0001
         else:
-            Num = (1.0 * N / V[word])
+            Num = (N / V[word])
         idf[word] = log10(Num) / log10(N + 1)
     return idf
 
@@ -78,8 +76,8 @@ def similarity(Dh, Th, Vocabulary):
         Dvalue = Dh.get(word, 0)
         Tvalue = Th.get(word, 0)
         Dh_Th += Dvalue * Tvalue
-        DhSquared += Dvalue ** 2
-        ThSquared += Tvalue ** 2
+        DhSquared += Dvalue * Dvalue
+        ThSquared += Tvalue * Tvalue
     cosineDeno = sqrt(DhSquared * ThSquared)
     return Dh_Th / cosineDeno
 

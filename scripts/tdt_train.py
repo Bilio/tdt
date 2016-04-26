@@ -25,9 +25,8 @@ for topic in listOfTopics:
     uniqueWordsInDoc = None
     topicWordCount = 0
 
-    N = 0
+    N = len(docsList)
     for document in docsList:
-        N += 1
         fileObj = open(os.path.join(topicPath, document), 'r')
         uniqueWordsInDoc, wordCount = tdt_utils.createTopicVector(fileObj, T, tfRaw)
         topicWordCount += wordCount
