@@ -8,7 +8,7 @@ For News Articles
 2. $ cd tdt/scripts/
 3. $ svn co -r 577 svn://snowball.tartarus.org/snowball/trunk/snowball snowball
 4. $ cd snowball
-5. $ svn patch ../tamil-stemmer/snowball-tamil.patch //got tamil patch from https://github.com/rdamodharan/tamil-stemmer
+5. $ svn patch ../snowball-tamil.patch //got tamil patch from https://github.com/rdamodharan/tamil-stemmer
 6. $ make
 
 

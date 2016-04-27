@@ -26,9 +26,11 @@ def stemWord(str):
 
 def modify_word(str):
     return stemWord(str)
+    # return str
 
 def createTopicVector(fileObj, T, tfRaw):
     fileContent = FileReader(fileObj).content
+    fileContent = ''.join(map(lambda x: ' ' if ord(x) < 48 or 57 < ord(x) < 64 else x, list(fileContent)))
     words = fileContent.strip().split()
     length = len(words)
     DVector = set()
@@ -45,6 +47,7 @@ def createTopicVector(fileObj, T, tfRaw):
 
 def createDocumentVector(fileObj, tfRawD):
     fileContent = FileReader(fileObj).content
+    fileContent = ''.join(map(lambda x: ' ' if ord(x) < 48 or 57 < ord(x) < 64 else x, list(fileContent)))
     words = fileContent.strip().split()
     length = len(words)
     uniqueWordsInDoc = set()
