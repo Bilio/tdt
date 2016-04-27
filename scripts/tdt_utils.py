@@ -9,6 +9,8 @@ stemmer = "./snowball/stemwords"
 
 stemmed_words = {}
 
+stopwords = map(lambda x: x.strip(), open('stopwords.txt', 'r').read().strip().split('\n'))
+
 def stemWord(str):
     if str in stemmed_words:
         return stemmed_words[str]
@@ -25,39 +27,45 @@ def stemWord(str):
     return res[0]
 
 def modify_word(str):
+    if str.strip() == '':
+        return None
+    if str.endswith('.'):
+        str = str[:-1]
     return stemWord(str)
     # return str
 
 def createTopicVector(fileObj, T, tfRaw):
     fileContent = FileReader(fileObj).content
-    fileContent = ''.join(map(lambda x: ' ' if ord(x) < 48 or 57 < ord(x) < 64 else x, list(fileContent)))
+    fileContent = ''.join(map(lambda x: ' ' if x != '.' and ord(x) < 48 or 57 < ord(x) < 65 else x, list(fileContent)))
     words = fileContent.strip().split()
     length = len(words)
     DVector = set()
     T.extend(words)
     for word in words:
         word = modify_word(word)
-        DVector.add(word)
-        if word not in tfRaw:
-            tfRaw[word] = 1
-        else:
-            tfRaw[word] += 1
+        if word:
+            DVector.add(word)
+            if word not in tfRaw:
+                tfRaw[word] = 1
+            else:
+                tfRaw[word] += 1
     return DVector, length
 
 
 def createDocumentVector(fileObj, tfRawD):
     fileContent = FileReader(fileObj).content
-    fileContent = ''.join(map(lambda x: ' ' if ord(x) < 48 or 57 < ord(x) < 64 else x, list(fileContent)))
+    fileContent = ''.join(map(lambda x: ' ' if x != '.' and ord(x) < 48 or 57 < ord(x) < 65 else x, list(fileContent)))
     words = fileContent.strip().split()
     length = len(words)
     uniqueWordsInDoc = set()
     for word in words:
         word = modify_word(word)
-        uniqueWordsInDoc.add(word)
-        if word not in tfRawD:
-            tfRawD[word] = 1
-        else:
-            tfRawD[word] += 1
+        if word:
+            uniqueWordsInDoc.add(word)
+            if word not in tfRawD:
+                tfRawD[word] = 1
+            else:
+                tfRawD[word] += 1
     for word in tfRawD:
         tfRawD[word] /= length
     return uniqueWordsInDoc, words, length, tfRawD
