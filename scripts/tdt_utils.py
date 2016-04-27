@@ -25,7 +25,8 @@ def stemWord(str):
     return res[0]
 
 def modify_word(str):
-    return stemWord(str)
+    # return stemWord(str)
+    return str
 
 def createTopicVector(fileObj, T, tfRaw):
     fileContent = FileReader(fileObj).content
