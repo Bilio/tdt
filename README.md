@@ -4,7 +4,7 @@ For News Articles
 -----------------
 
 ### Install snowball along with the project (Instructions:)
-1. $ cd <PATH_TO_TDT_PROJECT_FOLDER>
+1. $ cd PATH_TO_TDT_PROJECT_FOLDER
 2. $ cd tdt/scripts/
 3. $ svn co -r 577 svn://snowball.tartarus.org/snowball/trunk/snowball snowball
 4. $ cd snowball
