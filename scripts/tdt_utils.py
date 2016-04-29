@@ -5,7 +5,7 @@ from math import log10
 from math import sqrt
 from fileReader import FileReader
 
-stemmer = "./snowball/stemwords"
+stemmer = './snowball/stemwords'
 
 stemmed_words = {}
 
@@ -66,8 +66,8 @@ def createDocumentVector(fileObj, tfRawD):
                 tfRawD[word] = 1
             else:
                 tfRawD[word] += 1
-    for word in tfRawD:
-        tfRawD[word] /= length
+    #for word in tfRawD:
+        #tfRawD[word] /= length
     return uniqueWordsInDoc, words, length, tfRawD
 
 

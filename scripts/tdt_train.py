@@ -6,6 +6,7 @@ from config import MODEL_FILE
 import tdt_utils
 
 
+
 topicsFile = open(MODEL_FILE, 'wb')
 
 try:

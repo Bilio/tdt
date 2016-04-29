@@ -8,6 +8,12 @@ from config import TDT_OUT_DIR
 from config import TDT_TEST_DIR
 from config import LOG_FOLDER
 import tdt_utils
+import csv
+
+outputCsv = open('outputCsv.csv','wb')
+#outputFile = csv.writer(outputCsv,delimiter=',')
+fieldnames = ['Filename']# ['first_name', 'last_name']
+
 
 
 root = TDT_OUT_DIR
@@ -16,11 +22,16 @@ logger = open(os.path.join(LOG_FOLDER, 'output.txt'), 'w')
 docs = filter(lambda x: not x.startswith('.') and os.path.isfile(os.path.join(TDT_TEST_DIR, x)),
               os.listdir(TDT_TEST_DIR))
 
+
 for topic in topics:
     dir_path = os.path.join(root, topic['topic'])
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
+    fieldnames.append(topic['topic'])
 
+writer = csv.DictWriter(outputCsv, fieldnames=fieldnames)
+writer.writeheader()
+print(fieldnames)
 count = len(docs)
 for doc in docs:
     print count
@@ -30,7 +41,8 @@ for doc in docs:
     docOpen = open(os.path.join(TDT_TEST_DIR, doc), "r")
     tfRawD = {}
     uniqueWordsInDoc, DVector, lenD, tfRawD = tdt_utils.createDocumentVector(docOpen, tfRawD)
-
+    similarityWIthTopics={"Filename":doc}
+    print (doc)
     for topic in topics:
         V = topic['V']
         N = topic['N'] + 1
@@ -39,12 +51,19 @@ for doc in docs:
         tfD = tdt_utils.calculateTF(tfRawD, lenD, avgLength)
         tfT = tdt_utils.calculateTF(topic['tfRaw'], topic['length'], avgLength)
         idf = tdt_utils.calculateIdf(V, N)
+        topic['V']=dict(V)
+        '''if topic['topic']=='Business Events':
+            print len(topic['V'])
+            print(V)
+        '''
         Dh = tdt_utils.calculateProduct(tfD, idf)
         Th = tdt_utils.calculateProduct(tfT, idf)
         similarityValue = tdt_utils.similarity(Dh, Th, V)
         normalizedValue = similarityValue / topic['Z']
         results.append([topic['topic'], normalizedValue])
+        similarityWIthTopics[topic['topic']]=normalizedValue
 
+    writer.writerow(similarityWIthTopics)
     results = sorted(results, key=lambda x: x[1], reverse=True)
     logger.write('\n'.join(map(lambda x: '%s==%s'%(x[0], x[1]), results)))
     logger.write('\n')
