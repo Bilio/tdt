@@ -4,6 +4,7 @@ import popen2
 from math import log10
 from math import sqrt
 from fileReader import FileReader
+from evaluation.config import STEMMING
 
 stemmer = './snowball/stemwords'
 
@@ -31,7 +32,10 @@ def modify_word(str):
         return None
     if str.endswith('.'):
         str = str[:-1]
-    return stemWord(str)
+    if STEMMING:
+        return stemWord(str)
+    else:
+        return str
 
 def createTopicVector(fileObj, T, tfRaw):
     fileContent = FileReader(fileObj).content

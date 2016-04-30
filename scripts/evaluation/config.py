@@ -1,5 +1,7 @@
 import os
 
+
+STEMMING = False
 CURPATH         = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 MODEL_FILE      = os.path.join(CURPATH, 'tdt_model.txt')
 LOG_FOLDER      = os.path.join(CURPATH, 'logs')

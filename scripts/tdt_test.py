@@ -1,3 +1,4 @@
+from __future__ import division
 import shutil
 import os
 import pickle
@@ -49,9 +50,9 @@ for doc in docs:
         Dh = tdt_utils.calculateProduct(tfD, idf)
         Th = tdt_utils.calculateProduct(tfT, idf)
         similarityValue = tdt_utils.similarity(Dh, Th, V)
-        normalizedValue = min(similarityValue,topic['Z'])/max(similarityValue,topic['Z'])
+        normalizedValue = similarityValue / topic['Z']
         results.append([topic['topic'], normalizedValue])
-        similarityWIthTopics[topic['topic']] = normalizedValue
+        similarityWIthTopics[topic['topic']] = str(normalizedValue)
 
     writer.writerow(similarityWIthTopics)
     results = sorted(results, key=lambda x: x[1], reverse=True)
