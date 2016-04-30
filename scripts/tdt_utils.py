@@ -90,10 +90,11 @@ def calculateIdf(V, N):
     idf = {}
     for word in V:
         if (N / V[word]) == 1.0:
-            Num = (N / V[word]) - 0.0001
+            Num = 1.0001
         else:
             Num = (N / V[word])
         idf[word] = log10(Num) / log10(N + 1)
+        if idf[word] < 0: print idf[word], Num
     return idf
 
 
