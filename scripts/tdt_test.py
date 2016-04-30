@@ -1,27 +1,22 @@
 import shutil
-
-__author__ = 'Vibha Bhambhani and Shakshi Maheswari'
 import os
 import pickle
-from config import MODEL_FILE
-from config import TDT_OUT_DIR
-from config import TDT_TEST_DIR
-from config import LOG_FOLDER
+from evaluation.config import MODEL_FILE
+from evaluation.config import TDT_OUT_DIR
+from evaluation.config import TDT_TEST_DIR
+from evaluation.config import LOG_FOLDER
+from evaluation.config import TDT_TEST_OUT_FILE
 import tdt_utils
 import csv
 
-outputCsv = open('outputCsv.csv','wb')
-#outputFile = csv.writer(outputCsv,delimiter=',')
-fieldnames = ['Filename']# ['first_name', 'last_name']
-
-
+outputCsv = open(TDT_TEST_OUT_FILE,'wb')
+fieldnames = ['Filename']
 
 root = TDT_OUT_DIR
 topics = pickle.load(open(MODEL_FILE, "rb"))
 logger = open(os.path.join(LOG_FOLDER, 'output.txt'), 'w')
 docs = filter(lambda x: not x.startswith('.') and os.path.isfile(os.path.join(TDT_TEST_DIR, x)),
               os.listdir(TDT_TEST_DIR))
-
 
 for topic in topics:
     dir_path = os.path.join(root, topic['topic'])
@@ -31,18 +26,15 @@ for topic in topics:
 
 writer = csv.DictWriter(outputCsv, fieldnames=fieldnames)
 writer.writeheader()
-print(fieldnames)
 count = len(docs)
 for doc in docs:
-    print count
     count -= 1
     results = []
     logger.write('DOC NAME: %s\n'%(os.path.join(TDT_TEST_DIR, doc)))
     docOpen = open(os.path.join(TDT_TEST_DIR, doc), "r")
     tfRawD = {}
     uniqueWordsInDoc, DVector, lenD, tfRawD = tdt_utils.createDocumentVector(docOpen, tfRawD)
-    similarityWIthTopics={"Filename":doc}
-    print (doc)
+    similarityWIthTopics = {"Filename": doc}
     for topic in topics:
         V = topic['V']
         N = topic['N'] + 1
@@ -52,16 +44,12 @@ for doc in docs:
         tfT = tdt_utils.calculateTF(topic['tfRaw'], topic['length'], avgLength)
         idf = tdt_utils.calculateIdf(V, N)
         topic['V']=dict(V)
-        '''if topic['topic']=='Business Events':
-            print len(topic['V'])
-            print(V)
-        '''
         Dh = tdt_utils.calculateProduct(tfD, idf)
         Th = tdt_utils.calculateProduct(tfT, idf)
         similarityValue = tdt_utils.similarity(Dh, Th, V)
         normalizedValue = similarityValue / topic['Z']
         results.append([topic['topic'], normalizedValue])
-        similarityWIthTopics[topic['topic']]=normalizedValue
+        similarityWIthTopics[topic['topic']] = normalizedValue
 
     writer.writerow(similarityWIthTopics)
     results = sorted(results, key=lambda x: x[1], reverse=True)

@@ -4,4 +4,5 @@ scripts/logs/
 scripts/tdt_model.txt
 data/tdt_out/
 data/tdt_test/
+data/evaluation_data/
 scripts/snowball

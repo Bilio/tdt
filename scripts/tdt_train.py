@@ -1,10 +1,8 @@
-__author__ = 'Vibha Bhambhani and Shakshi Maheswari'
 import pickle
 import os
-from config import TDT_DEV_DIR
-from config import MODEL_FILE
+from evaluation.config import TDT_DEV_DIR
+from evaluation.config import MODEL_FILE
 import tdt_utils
-
 
 
 topicsFile = open(MODEL_FILE, 'wb')
