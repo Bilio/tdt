@@ -49,7 +49,7 @@ for doc in docs:
         Dh = tdt_utils.calculateProduct(tfD, idf)
         Th = tdt_utils.calculateProduct(tfT, idf)
         similarityValue = tdt_utils.similarity(Dh, Th, V)
-        normalizedValue = similarityValue / topic['Z']
+        normalizedValue = min(similarityValue,topic['Z'])/max(similarityValue,topic['Z'])
         results.append([topic['topic'], normalizedValue])
         similarityWIthTopics[topic['topic']] = normalizedValue
 
