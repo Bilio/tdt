@@ -3,6 +3,7 @@ import os
 from evaluation.config import TDT_DEV_DIR
 from evaluation.config import MODEL_FILE
 import tdt_utils
+import sys
 
 
 topicsFile = open(MODEL_FILE, 'wb')
@@ -14,6 +15,8 @@ except:
 
 dictionaryOfTopics = []
 
+lenoftopics = len(listOfTopics)
+topicindex = 1
 for topic in listOfTopics:
     T = []
     tfRaw = {}
@@ -54,5 +57,9 @@ for topic in listOfTopics:
 
     similarityValueSum /= N
     topicInfo['Z'] = similarityValueSum
+
+    sys.stdout.write("\rTopic Training in Progress:\t%d%%" % (topicindex*100/lenoftopics))
+    sys.stdout.flush()
+    topicindex+=1
 
 pickle.dump(dictionaryOfTopics, topicsFile)
