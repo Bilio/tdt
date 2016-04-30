@@ -8,6 +8,7 @@ from evaluation.config import LOG_FOLDER
 from evaluation.config import TDT_TEST_OUT_FILE
 import tdt_utils
 import csv
+import sys
 
 outputCsv = open(TDT_TEST_OUT_FILE,'wb')
 fieldnames = ['Filename']
@@ -27,8 +28,9 @@ for topic in topics:
 writer = csv.DictWriter(outputCsv, fieldnames=fieldnames)
 writer.writeheader()
 count = len(docs)
+
+i = 1
 for doc in docs:
-    count -= 1
     results = []
     logger.write('DOC NAME: %s\n'%(os.path.join(TDT_TEST_DIR, doc)))
     docOpen = open(os.path.join(TDT_TEST_DIR, doc), "r")
@@ -57,3 +59,7 @@ for doc in docs:
     logger.write('\n')
     shutil.copyfile(os.path.join(TDT_TEST_DIR, doc), os.path.join(TDT_OUT_DIR, results[0][0], doc))
     logger.write('--------------------------------------------\n')
+    sys.stdout.write("\rTopic Tracking in Progress:\t%d%%" % (i*100/count))
+    sys.stdout.flush()
+    i += 1
+

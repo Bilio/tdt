@@ -3,6 +3,7 @@ from evaluation.config import TDT_TEST_DIR
 from evaluation.config import TDT_DET_EVAL_FILE
 import tdt_utils
 import csv
+import sys
 
 theta = 0.04
 docClusterDict = {}
@@ -29,6 +30,7 @@ idf = tdt_utils.calculateIdf(V, N)
 tfidf[doc] = tdt_utils.calculateProduct(tfD, idf)
 docClusterDict[doc]=0
 clusterDocDict[0]=[doc]
+count = len(docs)
 
 for doc in docs[1:]:
     docOpen = open(os.path.join(TDT_TEST_DIR, doc), "r")
@@ -55,6 +57,8 @@ for doc in docs[1:]:
         docClusterDict[doc] = clusterNo
         clusterDocDict[clusterNo] = [doc]
     tfidf[doc] = Dh
+    sys.stdout.write("\rTopic Detection in Progress:\t%d%%" % (N*100/count))
+    sys.stdout.flush()
 
 outputCsv = open(TDT_DET_EVAL_FILE, 'wb')
 writer = csv.DictWriter(outputCsv, fieldnames=['Cluster %d'%(x) for x in range(1, clusterNo + 2)])
@@ -73,3 +77,4 @@ for i in range(0, maxLength):
     for j in range(0, clusterNo+1):
         temp['Cluster %d'%(j+1)] = newClusterDocs[j][i]
     writer.writerow(temp)
+print 'Topic Detection Complete.'

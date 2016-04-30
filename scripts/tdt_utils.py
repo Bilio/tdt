@@ -32,7 +32,6 @@ def modify_word(str):
     if str.endswith('.'):
         str = str[:-1]
     return stemWord(str)
-    # return str
 
 def createTopicVector(fileObj, T, tfRaw):
     fileContent = FileReader(fileObj).content
@@ -66,8 +65,6 @@ def createDocumentVector(fileObj, tfRawD):
                 tfRawD[word] = 1
             else:
                 tfRawD[word] += 1
-    #for word in tfRawD:
-        #tfRawD[word] /= length
     return uniqueWordsInDoc, words, length, tfRawD
 
 
@@ -94,7 +91,6 @@ def calculateIdf(V, N):
         else:
             Num = (N / V[word])
         idf[word] = log10(Num) / log10(N + 1)
-        if idf[word] < 0: print idf[word], Num
     return idf
 
 
