@@ -4,12 +4,14 @@ For News Articles
 -----------------
 
 ### Install snowball along with the project (Instructions:)
-1. $ cd PATH_TO_TDT_PROJECT_FOLDER
-2. $ cd tdt/scripts/
-3. $ svn co -r 577 svn://snowball.tartarus.org/snowball/trunk/snowball snowball
-4. $ cd snowball
-5. $ svn patch ../snowball-tamil.patch //got tamil patch from https://github.com/rdamodharan/tamil-stemmer
-6. $ make
+```
+$ cd PATH_TO_TDT_PROJECT_FOLDER
+$ cd tdt/scripts/
+$ svn co -r 577 svn://snowball.tartarus.org/snowball/trunk/snowball snowball
+$ cd snowball
+$ svn patch ../snowball-tamil.patch //got tamil patch from https://github.com/rdamodharan/tamil-stemmer
+$ make
+```
 
 
 ### Team Members
